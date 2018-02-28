@@ -29,7 +29,7 @@ const controls = {
   shape: 'coral',
   color: [255, 0, 105, 1.0], // CSS string
   iterations: 4,
-  height: 17,
+  randomize: 2,
   'Load Scene': loadScene // A function pointer, essentially
 };
 
@@ -65,7 +65,7 @@ function loadScene() {
 function main() {
     //lsystem
     axiom = "FFFFFFFFFFX";
-    height = controls.height;
+    height = controls.randomize;
     iteration = controls.iterations;
     var lsys = new Lsystem(axiom, iteration);
     var path = lsys.createPath(); //create string path
@@ -89,7 +89,7 @@ function main() {
   const gui = new DAT.GUI();
   gui.addColor(controls, 'color');
   gui.add(controls, 'shaders', ['lambert']);
-  gui.add(controls, 'height', 5, 10).step(1);
+  gui.add(controls, 'randomize', 0, 3).step(1);
   gui.add(controls, 'iterations', 0, 5).step(1);
   gui.add(controls, 'shape', ['coral']);
   gui.add(controls, 'Load Scene');
@@ -134,7 +134,7 @@ function main() {
   ]);
 
   var it = controls.iterations;
-  var ta = controls.height;
+  var ta = controls.randomize;
   console.log("height: " + ta);
 
   // This function will be called every frame
@@ -151,7 +151,7 @@ function main() {
       camera.update();
       stats.begin();
 
-      var height = controls.height;
+      var height = controls.randomize;
       if(ta !== height) {
         var lsys = new Lsystem(axiom, iteration);
         var path = lsys.createPath(); //create string path

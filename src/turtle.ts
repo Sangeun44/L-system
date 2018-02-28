@@ -47,11 +47,13 @@ export default class Turtle {
     rotateTurtle(axis: vec3, x : number) {
        //matrices
         var rotMat = this.rotationMatrix(axis, x);
-
-        vec3.transformMat4(this.state.dir, this.state.dir, rotMat);
-
+        var changedDir = vec3.create();
+        vec3.transformMat4(changedDir, this.state.dir, rotMat);
+        vec3.normalize(changedDir, changedDir);
+        if(changedDir[1] > 0) {
+            this.state.dir = changedDir;
+        }
         // this.state.dir = vec3.fromValues(new1, new2, new3);
-        this.state.dir = vec3.normalize(this.state.dir, this.state.dir);
     }
 
     translateVertices(positions: Array<number>) {
@@ -195,7 +197,7 @@ export default class Turtle {
                 //start branch    
                 var check = Math.floor(Math.random() * 100);
                 if(check > 80) {
-                    var rand1 = Math.floor(Math.random() * 5) + 1;  
+                    var rand1 = Math.floor(Math.random() * 2) + 1;  
                     if(width - rand1 > 0) {
                         width -= rand1;
                     }
