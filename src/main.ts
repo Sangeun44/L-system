@@ -28,8 +28,8 @@ const controls = {
   shaders: 'lambert',
   shape: 'coral',
   color: [255, 0, 105, 1.0], // CSS string
-  iterations: 3,
-  height: 20,
+  iterations: 4,
+  height: 17,
   'Load Scene': loadScene // A function pointer, essentially
 };
 
