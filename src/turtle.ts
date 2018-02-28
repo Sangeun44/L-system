@@ -158,7 +158,7 @@ export default class Turtle {
             if(currentChar === "F") {
                 var check = Math.floor(Math.random() * 100);
                 if(check < 20) {
-                    var rand1 = Math.floor(Math.random() * 180);  
+                    var rand1 = Math.floor(Math.random() * 10);  
                     //change angle while going forward
                     var axis = vec3.fromValues(1,1,1);
                     this.rotateTurtle(axis, rand1); //rotate direction of the turtle
