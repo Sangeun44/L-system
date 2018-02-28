@@ -45,6 +45,7 @@ let base: Base;
 
 let iteration: number;
 let axiom: string;
+let height: number;
 //time
 let count: number = 0.0;
 
@@ -63,15 +64,8 @@ function loadScene() {
 
 function main() {
     //lsystem
-    var axiomStr = "";
-    // axiomStr += "FXS";
-    for(var i =0; i < controls.height; ++i) {
-      axiomStr = axiomStr + "F";
-    }
-    axiomStr += "X";
-  
-
-    axiom = axiomStr;
+    axiom = "FFFFFFFFFFX";
+    height = controls.height;
     iteration = controls.iterations;
     var lsys = new Lsystem(axiom, iteration);
     var path = lsys.createPath(); //create string path
@@ -79,7 +73,7 @@ function main() {
     tree1 = new Tree(vec3.fromValues(0,0,0));
     tree2 = new Tree(vec3.fromValues(0,0,0));
      //turle action
-    var turtle = new Turtle(tree1, tree2, path);
+    var turtle = new Turtle(tree1, tree2, path, height);
     turtle.draw();
 
     
@@ -95,7 +89,7 @@ function main() {
   const gui = new DAT.GUI();
   gui.addColor(controls, 'color');
   gui.add(controls, 'shaders', ['lambert']);
-  gui.add(controls, 'height', 10, 20).step(1);
+  gui.add(controls, 'height', 5, 10).step(1);
   gui.add(controls, 'iterations', 0, 5).step(1);
   gui.add(controls, 'shape', ['coral']);
   gui.add(controls, 'Load Scene');
@@ -143,10 +137,11 @@ function main() {
   var ta = controls.height;
   // This function will be called every frame
   function tick() {
+    
+    //U_tIME
     count++;
     vertex.setTime(count)
     
-    var axiom = axiomStr;
     let new_color = vec4.fromValues(controls.color[0]/255, controls.color[1]/255, controls.color[2]/255, 1);
     let base_color = vec4.fromValues(64/255, 255/255, 255/255, 1);
       tree_lambert.setGeometryColor(new_color);  
@@ -156,14 +151,6 @@ function main() {
 
       var height = controls.height;
       if(ta !== height) {
-        var axiomStr = "";
-        for(var i =0; i < controls.height; ++i) {
-          axiomStr = axiomStr + "F";
-        }
-        axiomStr += "X";
-        axiom = axiomStr;
-        console.log(axiom);
-
         var lsys = new Lsystem(axiom, iteration);
         var path = lsys.createPath(); //create string path
 
@@ -171,7 +158,7 @@ function main() {
         tree2 = new Tree(vec3.fromValues(0,0,0));
 
         //turle action
-       var turtle = new Turtle(tree1, tree2, path);
+       var turtle = new Turtle(tree1, tree2, path, height);
        turtle.draw();
    
        tree1.create();
@@ -183,21 +170,15 @@ function main() {
       //change in tree
       iteration = controls.iterations;
       if(it !== iteration){
-        var axiomStr = "";
-        for(var i =0; i < controls.height; ++i) {
-          axiomStr = axiomStr + "F";
-        }
-        axiomStr += "X";
-        axiom = axiomStr;
        //lsystem
         var lsys = new Lsystem(axiom, iteration);
         var path = lsys.createPath(); //create string path
-
+        console
         tree1 = new Tree(vec3.fromValues(0,0,0));
         tree2 = new Tree(vec3.fromValues(0,0,0));
 
          //turle action
-        var turtle = new Turtle(tree1, tree2, path);
+        var turtle = new Turtle(tree1, tree2, path, height);
         turtle.draw();
         
         tree1.create();

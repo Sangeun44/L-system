@@ -3572,8 +3572,8 @@ const controls = {
     shaders: 'lambert',
     shape: 'coral',
     color: [255, 0, 105, 1.0],
-    iterations: 3,
-    height: 20,
+    iterations: 4,
+    height: 17,
     'Load Scene': loadScene // A function pointer, essentially
 };
 //shapes
@@ -3587,6 +3587,7 @@ let tree2;
 let base;
 let iteration;
 let axiom;
+let height;
 //time
 let count = 0.0;
 function loadScene() {
@@ -3603,20 +3604,15 @@ function loadScene() {
 }
 function main() {
     //lsystem
-    var axiomStr = "";
-    // axiomStr += "FXS";
-    for (var i = 0; i < controls.height; ++i) {
-        axiomStr = axiomStr + "F";
-    }
-    axiomStr += "X";
-    axiom = axiomStr;
+    axiom = "FFFFFFFFFFX";
+    height = controls.height;
     iteration = controls.iterations;
     var lsys = new __WEBPACK_IMPORTED_MODULE_12__lsystem__["a" /* default */](axiom, iteration);
     var path = lsys.createPath(); //create string path
     tree1 = new __WEBPACK_IMPORTED_MODULE_6__geometry_Tree__["a" /* default */](__WEBPACK_IMPORTED_MODULE_0_gl_matrix__["c" /* vec3 */].fromValues(0, 0, 0));
     tree2 = new __WEBPACK_IMPORTED_MODULE_6__geometry_Tree__["a" /* default */](__WEBPACK_IMPORTED_MODULE_0_gl_matrix__["c" /* vec3 */].fromValues(0, 0, 0));
     //turle action
-    var turtle = new __WEBPACK_IMPORTED_MODULE_13__turtle__["a" /* default */](tree1, tree2, path);
+    var turtle = new __WEBPACK_IMPORTED_MODULE_13__turtle__["a" /* default */](tree1, tree2, path, height);
     turtle.draw();
     // Initial display for framerate
     const stats = __WEBPACK_IMPORTED_MODULE_1_stats_js__();
@@ -3644,7 +3640,7 @@ function main() {
     Object(__WEBPACK_IMPORTED_MODULE_10__globals__["b" /* setGL */])(gl);
     // Initial call to load scene
     loadScene();
-    const camera = new __WEBPACK_IMPORTED_MODULE_9__Camera__["a" /* default */](__WEBPACK_IMPORTED_MODULE_0_gl_matrix__["c" /* vec3 */].fromValues(-400, 100, -300), __WEBPACK_IMPORTED_MODULE_0_gl_matrix__["c" /* vec3 */].fromValues(0, 0, 0));
+    const camera = new __WEBPACK_IMPORTED_MODULE_9__Camera__["a" /* default */](__WEBPACK_IMPORTED_MODULE_0_gl_matrix__["c" /* vec3 */].fromValues(-1000, 500, -1000), __WEBPACK_IMPORTED_MODULE_0_gl_matrix__["c" /* vec3 */].fromValues(0, 0, 0));
     const renderer = new __WEBPACK_IMPORTED_MODULE_8__rendering_gl_OpenGLRenderer__["a" /* default */](canvas);
     renderer.setClearColor(0.3, 0.7, 0.9, 1);
     gl.enable(gl.DEPTH_TEST);
@@ -3668,9 +3664,9 @@ function main() {
     var ta = controls.height;
     // This function will be called every frame
     function tick() {
+        //U_tIME
         count++;
         vertex.setTime(count);
-        var axiom = axiomStr;
         let new_color = __WEBPACK_IMPORTED_MODULE_0_gl_matrix__["d" /* vec4 */].fromValues(controls.color[0] / 255, controls.color[1] / 255, controls.color[2] / 255, 1);
         let base_color = __WEBPACK_IMPORTED_MODULE_0_gl_matrix__["d" /* vec4 */].fromValues(64 / 255, 255 / 255, 255 / 255, 1);
         tree_lambert.setGeometryColor(new_color);
@@ -3679,19 +3675,12 @@ function main() {
         stats.begin();
         var height = controls.height;
         if (ta !== height) {
-            var axiomStr = "";
-            for (var i = 0; i < controls.height; ++i) {
-                axiomStr = axiomStr + "F";
-            }
-            axiomStr += "X";
-            axiom = axiomStr;
-            console.log(axiom);
             var lsys = new __WEBPACK_IMPORTED_MODULE_12__lsystem__["a" /* default */](axiom, iteration);
             var path = lsys.createPath(); //create string path
             tree1 = new __WEBPACK_IMPORTED_MODULE_6__geometry_Tree__["a" /* default */](__WEBPACK_IMPORTED_MODULE_0_gl_matrix__["c" /* vec3 */].fromValues(0, 0, 0));
             tree2 = new __WEBPACK_IMPORTED_MODULE_6__geometry_Tree__["a" /* default */](__WEBPACK_IMPORTED_MODULE_0_gl_matrix__["c" /* vec3 */].fromValues(0, 0, 0));
             //turle action
-            var turtle = new __WEBPACK_IMPORTED_MODULE_13__turtle__["a" /* default */](tree1, tree2, path);
+            var turtle = new __WEBPACK_IMPORTED_MODULE_13__turtle__["a" /* default */](tree1, tree2, path, height);
             turtle.draw();
             tree1.create();
             tree2.create();
@@ -3700,19 +3689,14 @@ function main() {
         //change in tree
         iteration = controls.iterations;
         if (it !== iteration) {
-            var axiomStr = "";
-            for (var i = 0; i < controls.height; ++i) {
-                axiomStr = axiomStr + "F";
-            }
-            axiomStr += "X";
-            axiom = axiomStr;
             //lsystem
             var lsys = new __WEBPACK_IMPORTED_MODULE_12__lsystem__["a" /* default */](axiom, iteration);
             var path = lsys.createPath(); //create string path
+            console;
             tree1 = new __WEBPACK_IMPORTED_MODULE_6__geometry_Tree__["a" /* default */](__WEBPACK_IMPORTED_MODULE_0_gl_matrix__["c" /* vec3 */].fromValues(0, 0, 0));
             tree2 = new __WEBPACK_IMPORTED_MODULE_6__geometry_Tree__["a" /* default */](__WEBPACK_IMPORTED_MODULE_0_gl_matrix__["c" /* vec3 */].fromValues(0, 0, 0));
             //turle action
-            var turtle = new __WEBPACK_IMPORTED_MODULE_13__turtle__["a" /* default */](tree1, tree2, path);
+            var turtle = new __WEBPACK_IMPORTED_MODULE_13__turtle__["a" /* default */](tree1, tree2, path, height);
             turtle.draw();
             tree1.create();
             tree2.create();
@@ -3725,7 +3709,7 @@ function main() {
         renderer.render(camera, vertex, [tree2]);
         renderer.render(camera, tree_lambert, [base]);
         base_lambert.setGeometryColor(base_color);
-        renderer.render(camera, base_lambert, [square]);
+        //renderer.render(camera, base_lambert, [square]);
         //tester cylinder
         //renderer.render(camera, tree_lambert, [flower]);
         stats.end();
@@ -15755,7 +15739,7 @@ class Lsystem {
         // default LSystem
         this.axiom = axiom;
         this.grammar = {};
-        this.grammar["X"] = "S[+FFFFFFFFFFFFFFXFFFFX]+FFFFFFFFFFFFFFXFFX";
+        this.grammar["X"] = "S[+FFFFFFFFFFFXFFFX]+FFFFFFFXFFFFFFFFFFFX";
         this.iterations = iterations;
     }
 }
@@ -15786,7 +15770,7 @@ var TurtleState = function (pos, dir) {
     };
 };
 class Turtle {
-    constructor(tree, tree2, path) {
+    constructor(tree, tree2, path, height) {
         this.state = TurtleState(__WEBPACK_IMPORTED_MODULE_0_gl_matrix__["c" /* vec3 */].fromValues(0, 0, 0), __WEBPACK_IMPORTED_MODULE_0_gl_matrix__["c" /* vec3 */].fromValues(1, 1, 1));
         //rotate X direction
         this.rotateX = function (theta) {
@@ -15919,29 +15903,30 @@ class Turtle {
         var stackP = new Array();
         var stackD = new Array();
         //random values
-        var width = 70;
-        var dist = 8;
+        var width = 80;
+        var dist = this.height;
         for (var i = 0; i < this.path.length; ++i) {
             var currentChar = this.path.charAt(i);
             console.log("currentChar:" + currentChar);
             if (currentChar === "F") {
-                var check = Math.floor(Math.random() * 100);
-                if (check < 20) {
-                    var rand1 = Math.floor(Math.random() * 10);
-                    //change angle while going forward
-                    var axis = __WEBPACK_IMPORTED_MODULE_0_gl_matrix__["c" /* vec3 */].fromValues(1, 0, 0);
-                    this.rotateTurtle(axis, rand1); //rotate direction of the turtle
-                    var axis = __WEBPACK_IMPORTED_MODULE_0_gl_matrix__["c" /* vec3 */].fromValues(0, 1, 0);
-                    this.rotateTurtle(axis, rand1); //rotate direction of the turtle
-                    var axis = __WEBPACK_IMPORTED_MODULE_0_gl_matrix__["c" /* vec3 */].fromValues(0, 0, 1);
-                    this.rotateTurtle(axis, rand1); //rotate direction of the turtle
+                if (i !== 0) {
+                    var check = Math.floor(Math.random() * 100) + 2;
+                    if (check < 10) {
+                        var rand1 = Math.floor(Math.random() * 10) + 1;
+                        //change angle while going forward
+                        var axis = __WEBPACK_IMPORTED_MODULE_0_gl_matrix__["c" /* vec3 */].fromValues(1, 0, 0);
+                        this.rotateTurtle(axis, rand1); //rotate direction of the turtle
+                        axis = __WEBPACK_IMPORTED_MODULE_0_gl_matrix__["c" /* vec3 */].fromValues(0, 1, 0);
+                        this.rotateTurtle(axis, rand1); //rotate direction of the turtle
+                        axis = __WEBPACK_IMPORTED_MODULE_0_gl_matrix__["c" /* vec3 */].fromValues(0, 0, 1);
+                        this.rotateTurtle(axis, rand1); //rotate direction of the turtle
+                    }
                 }
                 //make a forward cylinder
                 var cylinder = new __WEBPACK_IMPORTED_MODULE_1__geometry_Cylinder__["a" /* default */](__WEBPACK_IMPORTED_MODULE_0_gl_matrix__["c" /* vec3 */].fromValues(0, 0, 0));
                 //CHANGE vertices depending on direction of the turtle
                 var posArr = cylinder.getPos();
                 posArr = this.scaleVertices(posArr, width);
-                var axis = __WEBPACK_IMPORTED_MODULE_0_gl_matrix__["c" /* vec3 */].fromValues(1, 0, 1);
                 posArr = this.rotateVertices(20, posArr);
                 posArr = this.translateVertices(posArr);
                 cylinder.setPos(posArr);
@@ -15958,9 +15943,9 @@ class Turtle {
             else if (currentChar === "[") {
                 //start branch    
                 var check = Math.floor(Math.random() * 100);
-                if (check > 70) {
-                    var rand1 = Math.floor(Math.random() * 10);
-                    if (width - rand1 > 10) {
+                if (check > 80) {
+                    var rand1 = Math.floor(Math.random() * 5) + 1;
+                    if (width - rand1 > 0) {
                         width -= rand1;
                     }
                 }
@@ -15969,9 +15954,9 @@ class Turtle {
             else if (currentChar === "]") {
                 //change width/scale
                 var check = Math.floor(Math.random() * 100);
-                if (check > 70) {
-                    var rand1 = Math.floor(Math.random() * 10);
-                    if (width + rand1 < 20) {
+                if (check > 80) {
+                    var rand1 = Math.floor(Math.random() * 5) + 1;
+                    if (width + rand1 < 40) {
                         width += rand1;
                     }
                 }
@@ -15983,7 +15968,7 @@ class Turtle {
             }
             else if (currentChar === "X") {
                 var check = Math.floor(Math.random() * 100);
-                if (check > 60) {
+                if (check > 40) {
                     var flower = new __WEBPACK_IMPORTED_MODULE_2__geometry_flower__["a" /* default */](__WEBPACK_IMPORTED_MODULE_0_gl_matrix__["c" /* vec3 */].fromValues(0, 0, 0));
                     posArr = flower.getPos();
                     posArr = this.scaleVertices(flower.getPos(), 90);
@@ -15994,35 +15979,43 @@ class Turtle {
                 }
             }
             else if (currentChar === "+") {
-                var max = 180;
+                var max = 20;
                 var min = 0;
                 //change angle
                 var check = Math.floor(Math.random() * 100);
-                if (check > 30) {
+                if (check > 40) {
                     var rand1 = Math.floor(Math.random() * max) - min;
                     var axis = __WEBPACK_IMPORTED_MODULE_0_gl_matrix__["c" /* vec3 */].fromValues(1, 0, 1);
                     this.rotateTurtle(axis, rand1); //rotate direction of the turtle
                 }
-                else if (check > 50) {
+                else if (check > 70) {
                     var rand1 = Math.floor(Math.random() * max) - min;
-                    var axis = __WEBPACK_IMPORTED_MODULE_0_gl_matrix__["c" /* vec3 */].fromValues(1, 0, 1);
-                    this.rotateTurtle(axis, rand1); //rotate direction of the turtle                        
+                    var axis = __WEBPACK_IMPORTED_MODULE_0_gl_matrix__["c" /* vec3 */].fromValues(1, 0, 0);
+                    this.rotateTurtle(axis, rand1); //rotate direction of the turtle
+                    axis = __WEBPACK_IMPORTED_MODULE_0_gl_matrix__["c" /* vec3 */].fromValues(0, 1, 0);
+                    this.rotateTurtle(axis, rand1); //rotate direction of the turtle
+                    axis = __WEBPACK_IMPORTED_MODULE_0_gl_matrix__["c" /* vec3 */].fromValues(0, 0, 1);
+                    this.rotateTurtle(axis, rand1); //rotate direction of the turtle                      
                 }
             }
             else if (currentChar === "-") {
-                var max = 180;
+                var max = 20;
                 var min = 0;
                 //change angle
                 var check = Math.floor(Math.random() * 100);
-                if (check > 30) {
+                if (check > 50) {
                     var rand1 = Math.floor(Math.random() * max) - min;
                     var axis = __WEBPACK_IMPORTED_MODULE_0_gl_matrix__["c" /* vec3 */].fromValues(1, 0, 1);
                     this.rotateTurtle(axis, rand1); //rotate direction of the turtle                        
                 }
-                else if (check > 50) {
+                else if (check > 70) {
                     var rand1 = Math.floor(Math.random() * max) - min;
-                    var axis = __WEBPACK_IMPORTED_MODULE_0_gl_matrix__["c" /* vec3 */].fromValues(1, 0, 1);
-                    this.rotateTurtle(axis, rand1); //rotate direction of the turtle                        
+                    var axis = __WEBPACK_IMPORTED_MODULE_0_gl_matrix__["c" /* vec3 */].fromValues(1, 0, 0);
+                    this.rotateTurtle(axis, rand1); //rotate direction of the turtle
+                    axis = __WEBPACK_IMPORTED_MODULE_0_gl_matrix__["c" /* vec3 */].fromValues(0, 1, 0);
+                    this.rotateTurtle(axis, rand1); //rotate direction of the turtle
+                    axis = __WEBPACK_IMPORTED_MODULE_0_gl_matrix__["c" /* vec3 */].fromValues(0, 0, 1);
+                    this.rotateTurtle(axis, rand1); //rotate direction of the turtle                    
                 }
             }
         }
