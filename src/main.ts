@@ -135,6 +135,8 @@ function main() {
 
   var it = controls.iterations;
   var ta = controls.height;
+  console.log("height: " + ta);
+
   // This function will be called every frame
   function tick() {
     
@@ -165,6 +167,7 @@ function main() {
        tree2.create();
 
        ta = height;
+       console.log("height: " + ta);
       }
 
       //change in tree
@@ -177,7 +180,7 @@ function main() {
         tree1 = new Tree(vec3.fromValues(0,0,0));
         tree2 = new Tree(vec3.fromValues(0,0,0));
 
-         //turle action
+        //turle action
         var turtle = new Turtle(tree1, tree2, path, height);
         turtle.draw();
         

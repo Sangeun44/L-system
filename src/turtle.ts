@@ -152,7 +152,7 @@ export default class Turtle {
         //random values
         var width = 80;
         var dist = 10;
-        console.log("h:" + dist);
+        console.log("height: " + this.height);
 
         for(var i = 0; i < this.path.length; ++i) {
             var currentChar = this.path.charAt(i);
