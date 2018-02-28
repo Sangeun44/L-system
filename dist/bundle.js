@@ -15927,9 +15927,13 @@ class Turtle {
             if (currentChar === "F") {
                 var check = Math.floor(Math.random() * 100);
                 if (check < 20) {
-                    var rand1 = Math.floor(Math.random() * 30);
+                    var rand1 = Math.floor(Math.random() * 10);
                     //change angle while going forward
-                    var axis = __WEBPACK_IMPORTED_MODULE_0_gl_matrix__["c" /* vec3 */].fromValues(1, 1, 1);
+                    var axis = __WEBPACK_IMPORTED_MODULE_0_gl_matrix__["c" /* vec3 */].fromValues(1, 0, 0);
+                    this.rotateTurtle(axis, rand1); //rotate direction of the turtle
+                    var axis = __WEBPACK_IMPORTED_MODULE_0_gl_matrix__["c" /* vec3 */].fromValues(0, 1, 0);
+                    this.rotateTurtle(axis, rand1); //rotate direction of the turtle
+                    var axis = __WEBPACK_IMPORTED_MODULE_0_gl_matrix__["c" /* vec3 */].fromValues(0, 0, 1);
                     this.rotateTurtle(axis, rand1); //rotate direction of the turtle
                 }
                 //make a forward cylinder
@@ -15990,7 +15994,7 @@ class Turtle {
                 }
             }
             else if (currentChar === "+") {
-                var max = 360;
+                var max = 180;
                 var min = 0;
                 //change angle
                 var check = Math.floor(Math.random() * 100);
@@ -16006,7 +16010,7 @@ class Turtle {
                 }
             }
             else if (currentChar === "-") {
-                var max = 360;
+                var max = 180;
                 var min = 0;
                 //change angle
                 var check = Math.floor(Math.random() * 100);
