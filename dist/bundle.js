@@ -3573,7 +3573,7 @@ const controls = {
     shape: 'coral',
     color: [255, 0, 105, 1.0],
     iterations: 4,
-    height: 17,
+    randomize: 2,
     'Load Scene': loadScene // A function pointer, essentially
 };
 //shapes
@@ -3605,7 +3605,7 @@ function loadScene() {
 function main() {
     //lsystem
     axiom = "FFFFFFFFFFX";
-    height = controls.height;
+    height = controls.randomize;
     iteration = controls.iterations;
     var lsys = new __WEBPACK_IMPORTED_MODULE_12__lsystem__["a" /* default */](axiom, iteration);
     var path = lsys.createPath(); //create string path
@@ -3625,7 +3625,7 @@ function main() {
     const gui = new __WEBPACK_IMPORTED_MODULE_2_dat_gui__["GUI"]();
     gui.addColor(controls, 'color');
     gui.add(controls, 'shaders', ['lambert']);
-    gui.add(controls, 'height', 10, 20).step(1);
+    gui.add(controls, 'randomize', 0, 3).step(1);
     gui.add(controls, 'iterations', 0, 5).step(1);
     gui.add(controls, 'shape', ['coral']);
     gui.add(controls, 'Load Scene');
@@ -3661,7 +3661,8 @@ function main() {
         new __WEBPACK_IMPORTED_MODULE_11__rendering_gl_ShaderProgram__["a" /* Shader */](gl.FRAGMENT_SHADER, __webpack_require__(80)),
     ]);
     var it = controls.iterations;
-    var ta = controls.height;
+    var ta = controls.randomize;
+    console.log("height: " + ta);
     // This function will be called every frame
     function tick() {
         //U_tIME
@@ -3673,7 +3674,7 @@ function main() {
         base_lambert.setGeometryColor(base_color);
         camera.update();
         stats.begin();
-        var height = controls.height;
+        var height = controls.randomize;
         if (ta !== height) {
             var lsys = new __WEBPACK_IMPORTED_MODULE_12__lsystem__["a" /* default */](axiom, iteration);
             var path = lsys.createPath(); //create string path
@@ -3685,6 +3686,7 @@ function main() {
             tree1.create();
             tree2.create();
             ta = height;
+            console.log("height: " + ta);
         }
         //change in tree
         iteration = controls.iterations;
@@ -15739,7 +15741,7 @@ class Lsystem {
         // default LSystem
         this.axiom = axiom;
         this.grammar = {};
-        this.grammar["X"] = "S[+FFFFFFFFFFFXFFFX]+FFFFFFFXFFFFFFFFFFFX";
+        this.grammar["X"] = "S[+FFXFFFFFXFFFFFFFX]+FFFFFFFFFFXFFFFFFX";
         this.iterations = iterations;
     }
 }
@@ -15817,9 +15819,13 @@ class Turtle {
     rotateTurtle(axis, x) {
         //matrices
         var rotMat = this.rotationMatrix(axis, x);
-        __WEBPACK_IMPORTED_MODULE_0_gl_matrix__["c" /* vec3 */].transformMat4(this.state.dir, this.state.dir, rotMat);
+        var changedDir = __WEBPACK_IMPORTED_MODULE_0_gl_matrix__["c" /* vec3 */].create();
+        __WEBPACK_IMPORTED_MODULE_0_gl_matrix__["c" /* vec3 */].transformMat4(changedDir, this.state.dir, rotMat);
+        __WEBPACK_IMPORTED_MODULE_0_gl_matrix__["c" /* vec3 */].normalize(changedDir, changedDir);
+        if (changedDir[1] > 0) {
+            this.state.dir = changedDir;
+        }
         // this.state.dir = vec3.fromValues(new1, new2, new3);
-        this.state.dir = __WEBPACK_IMPORTED_MODULE_0_gl_matrix__["c" /* vec3 */].normalize(this.state.dir, this.state.dir);
     }
     translateVertices(positions) {
         var newPositions = new Array();
@@ -15904,7 +15910,8 @@ class Turtle {
         var stackD = new Array();
         //random values
         var width = 80;
-        var dist = this.height;
+        var dist = 10;
+        console.log("height: " + this.height);
         for (var i = 0; i < this.path.length; ++i) {
             var currentChar = this.path.charAt(i);
             console.log("currentChar:" + currentChar);
@@ -15944,7 +15951,7 @@ class Turtle {
                 //start branch    
                 var check = Math.floor(Math.random() * 100);
                 if (check > 80) {
-                    var rand1 = Math.floor(Math.random() * 5) + 1;
+                    var rand1 = Math.floor(Math.random() * 2) + 1;
                     if (width - rand1 > 0) {
                         width -= rand1;
                     }
@@ -17039,7 +17046,7 @@ module.exports = "#version 300 es\n\n//This is a vertex shader. While it is call
 /* 74 */
 /***/ (function(module, exports) {
 
-module.exports = "#version 300 es\n\n// This is a fragment shader. If you've opened this file first, please\n// open and read lambert.vert.glsl before reading on.\n// Unlike the vertex shader, the fragment shader actually does compute\n// the shading of geometry. For every pixel in your program's output\n// screen, the fragment shader is run for every bit of geometry that\n// particular pixel overlaps. By implicitly interpolating the position\n// data passed into the fragment shader by the vertex shader, the fragment shader\n// can compute what color to apply to its pixel based on things like vertex\n// position, light position, and vertex color.\nprecision highp float;\n\nuniform vec4 u_Color; // The color with which to render this instance of geometry.\nuniform float u_Time;\n\n// These are the interpolated values out of the rasterizer, so you can't know\n// their specific values without knowing the vertices that contributed to them\nin vec4 fs_Nor;\nin vec4 fs_LightVec;\nin vec4 fs_Col;\nin vec4 fs_Pos;\n\nout vec4 out_Col; // This is the final output color that you will see on your\n                  // screen for the pixel that is currently being processed.\n\n\nfloat random (in vec2 st) {\n    return fract(sin(dot(st.xy,\n                         vec2(12.9898,78.233)))*\n        43758.5453123);\n}\n\nfloat snoise (in vec2 st) {\n    vec2 i = floor(st);\n    vec2 f = fract(st);\n\n    // Four corners in 2D of a tile\n    float a = random(i);\n    float b = random(i + vec2(1.0, 0.0));\n    float c = random(i + vec2(0.0, 1.0));\n    float d = random(i + vec2(1.0, 1.0));\n\n    vec2 u = f * f * (3.0 - 2.0 * f);\n\n    return mix(a, b, u.x) +\n            (c - a)* u.y * (1.0 - u.x) +\n            (d - b) * u.x * u.y;\n}\n\nfloat fbm (in vec2 st) {\n    // Initial values\n    float value = 0.0;\n    float amplitude = .5;\n    float frequency = 0.;\n\n    // Loop of octaves\n    for (int i = 0; i < 8; i++) {\n        value += amplitude * abs(snoise(st));\n        st *= 2.;\n        amplitude *= .5;\n    }\n    return value;\n}\n\nvoid main()\n{\n    // Material base color (before shading)\n        vec4 diffuseColor = u_Color;\n        // Calculate the diffuse term for Lambert shading\n        float diffuseTerm = dot(normalize(fs_Nor), normalize(fs_LightVec));\n        // Avoid negative lighting values\n        // diffuseTerm = clamp(diffuseTerm, 0, 1);\n\n        float ambientTerm = 0.8;\n\n        float lightIntensity = diffuseTerm + ambientTerm;   //Add a small float value to the color multiplier\n                                                            //to simulate ambient lighting. This ensures that faces that are not\n                                                            //lit by our point light are not completely black.\n        //float fbm = fbm(vec2(fs_Pos.x, fs_Pos.y));\n\n        vec3 a = vec3(0.9 * cos(u_Time * .01), 0.5, 0.5);\n        vec3 b = vec3(0.9, 0.5* cos(u_Time * .01), 0.5);\n        vec3 c = vec3(1.0, 1.0, 1.0);\n        vec3 d = vec3(0.0, 0.33*cos(u_Time * .01), 0.67);\n        vec4 color = vec4(a + b  * cos(u_Time * 0.01 * 2.f * 3.14159 * (c * diffuseTerm + d)), 1);\n\n        out_Col = vec4(color.rgb * lightIntensity, 1.);\n\n        // Compute final shaded color\n\n\n\n}\n"
+module.exports = "#version 300 es\n\n// This is a fragment shader. If you've opened this file first, please\n// open and read lambert.vert.glsl before reading on.\n// Unlike the vertex shader, the fragment shader actually does compute\n// the shading of geometry. For every pixel in your program's output\n// screen, the fragment shader is run for every bit of geometry that\n// particular pixel overlaps. By implicitly interpolating the position\n// data passed into the fragment shader by the vertex shader, the fragment shader\n// can compute what color to apply to its pixel based on things like vertex\n// position, light position, and vertex color.\nprecision highp float;\n\nuniform vec4 u_Color; // The color with which to render this instance of geometry.\nuniform float u_Time;\n\n// These are the interpolated values out of the rasterizer, so you can't know\n// their specific values without knowing the vertices that contributed to them\nin vec4 fs_Nor;\nin vec4 fs_LightVec;\nin vec4 fs_Col;\nin vec4 fs_Pos;\n\nout vec4 out_Col; // This is the final output color that you will see on your\n                  // screen for the pixel that is currently being processed.\n\n\nfloat random (in vec2 st) {\n    return fract(sin(dot(st.xy,\n                         vec2(12.9898,78.233)))*\n        43758.5453123);\n}\n\nfloat snoise (in vec2 st) {\n    vec2 i = floor(st);\n    vec2 f = fract(st);\n\n    // Four corners in 2D of a tile\n    float a = random(i);\n    float b = random(i + vec2(1.0, 0.0));\n    float c = random(i + vec2(0.0, 1.0));\n    float d = random(i + vec2(1.0, 1.0));\n\n    vec2 u = f * f * (3.0 - 2.0 * f);\n\n    return mix(a, b, u.x) +\n            (c - a)* u.y * (1.0 - u.x) +\n            (d - b) * u.x * u.y;\n}\n\nfloat fbm (in vec2 st) {\n    // Initial values\n    float value = 0.0;\n    float amplitude = .5;\n    float frequency = 0.;\n\n    // Loop of octaves\n    for (int i = 0; i < 8; i++) {\n        value += amplitude * abs(snoise(st));\n        st *= 2.;\n        amplitude *= .5;\n    }\n    return value;\n}\n\nvoid main()\n{\n    // Material base color (before shading)\n        vec4 diffuseColor = u_Color;\n        // Calculate the diffuse term for Lambert shading\n        float diffuseTerm = dot(normalize(fs_Nor), normalize(fs_LightVec));\n        // Avoid negative lighting values\n        // diffuseTerm = clamp(diffuseTerm, 0, 1);\n\n        float ambientTerm = 0.8;\n\n        float lightIntensity = diffuseTerm + ambientTerm;   //Add a small float value to the color multiplier\n                                                            //to simulate ambient lighting. This ensures that faces that are not\n                                                            //lit by our point light are not completely black.\n        //float fbm = fbm(vec2(fs_Pos.x, fs_Pos.y));\n\n        vec3 a = vec3(0.9 * cos(u_Time * .001), 0.5, 0.5);\n        vec3 b = vec3(0.9, 0.5* cos(u_Time * .001), 0.5);\n        vec3 c = vec3(1.0, 1.0, 1.0);\n        vec3 d = vec3(0.0, 0.33*cos(u_Time * .001), 0.67);\n        vec4 color = vec4(a + b  * cos(u_Time * 0.001 * 2.f * 3.14159 * (c * diffuseTerm + d)), 1);\n\n        out_Col = vec4(color.rgb * lightIntensity, 1.);\n\n        // Compute final shaded color\n\n\n\n}\n"
 
 /***/ }),
 /* 75 */
