@@ -14,19 +14,22 @@ can either implement your own OBJ parser, or use an OBJ-loading package via NPM:
 Pennkey: eunsang
 Name: Sang Lee
 
-demo: https://sangeun44.github.io/L-system/
+demo:  https://sangeun44.github.io/L-system/
 
 [![](1st.png)]
+[![](2nd.png)]
 
 ## Aesthetic REQ
 * Grows in 3D
+* Higher probability/tendency to grow upwards
 * Best is at 4th iteration
 * Used webgl-obj-loader and uploaded my own 3d models
+* Different shaders for flowers and the main tree
 * Randomization of angles for branching and crookedness in branches
 * Flowers/polyps are added
 
 ## Interactivity
-    *The Axiom is changeable by adjusting the height
-    *The color of the coral is changeable by color selection
-    *You can change the number of iterations of the grammer
-    
+*The tree re-iterates by adjusting the randomization
+*The color of the coral is changeable by color selection
+*You can change the number of iterations of the grammer
+
