@@ -3640,7 +3640,7 @@ function main() {
     Object(__WEBPACK_IMPORTED_MODULE_10__globals__["b" /* setGL */])(gl);
     // Initial call to load scene
     loadScene();
-    const camera = new __WEBPACK_IMPORTED_MODULE_9__Camera__["a" /* default */](__WEBPACK_IMPORTED_MODULE_0_gl_matrix__["c" /* vec3 */].fromValues(-1000, 500, -1000), __WEBPACK_IMPORTED_MODULE_0_gl_matrix__["c" /* vec3 */].fromValues(0, 0, 0));
+    const camera = new __WEBPACK_IMPORTED_MODULE_9__Camera__["a" /* default */](__WEBPACK_IMPORTED_MODULE_0_gl_matrix__["c" /* vec3 */].fromValues(-2000, 200, -2000), __WEBPACK_IMPORTED_MODULE_0_gl_matrix__["c" /* vec3 */].fromValues(0, 0, 0));
     const renderer = new __WEBPACK_IMPORTED_MODULE_8__rendering_gl_OpenGLRenderer__["a" /* default */](canvas);
     renderer.setClearColor(0.3, 0.7, 0.9, 1);
     gl.enable(gl.DEPTH_TEST);
