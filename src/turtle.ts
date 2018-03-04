@@ -197,7 +197,7 @@ export default class Turtle {
                 //start branch    
                 var check = Math.floor(Math.random() * 100);
                 if(check > 80) {
-                    var rand1 = Math.floor(Math.random() * 2) + 1;  
+                    var rand1 = Math.floor(Math.random() * 5) + 1;  
                     if(width - rand1 > 0) {
                         width -= rand1;
                     }
@@ -208,7 +208,7 @@ export default class Turtle {
                 //change width/scale
                 var check = Math.floor(Math.random() * 100);
                 if(check > 80) {
-                    var rand1 = Math.floor(Math.random() * 5) + 1;  
+                    var rand1 = Math.floor(Math.random() * 6) + 1;  
                     if(width + rand1 < 40) {
                         width += rand1;
                     }
